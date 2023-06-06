@@ -1,9 +1,16 @@
 #cloud-config
-# Cloud: Hetzner Cloud (though this may work with your cloud without any changes)
-# Instance Type: Shared vCPU, CPX11 (2 vCPU, 2GB RAM)
-# OS: Debian 11
+#
+# Copyright (c) 2023 Matt Smith
+# MIT License
+#
+# Cloud ........... : Hetzner Cloud (though this may work with your cloud without any changes)
+# Instance Type ... : Shared vCPU, CPX11 (2 vCPU, 2GB RAM)
+# OS .............. : Debian 11
+#
+# Description ..... :
 # This builds the latest VyOS 1.3.x (equuleus) ISO and serves it over HTTP and HTTPS.
 # The process takes approx. 25 minutes on the CPX11 instance type.
+#
 write_files:
   - content: |
       #!/bin/bash
