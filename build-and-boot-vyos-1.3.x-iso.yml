@@ -13,25 +13,8 @@
 #
 runcmd:
   - apt-get update >/dev/tty1 2>&1
-  - apt-get install -y apt-transport-https ca-certificates curl gnupg2 software-properties-common git ufw >/dev/tty1 2>&1
+  - apt-get install -y ufw curl >/dev/tty1 2>&1
   - ufw enable >/dev/tty1 2>&1
-  - apt-get upgrade -y >/dev/tty1 2>&1
-  - curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - >/dev/tty1 2>&1
-  - add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable" >/dev/tty1 2>&1
-  - apt-get update >/dev/tty1 2>&1
-  - apt-get install -y docker-ce >/dev/tty1 2>&1
-  - systemctl start docker >/dev/tty1 2>&1
-  - cd /root && git clone -b equuleus --single-branch https://github.com/vyos/vyos-build >/dev/tty1 2>&1
-  - cd /root/vyos-build/docker && docker build -t vyos-builder . >/dev/tty1 2>&1 || (echo ; echo ; echo "Something went wrong... aborting. (vyos-builder)" ; exit 1)
-  - cd /root/vyos-build && docker run -t -v "$(pwd)":/vyos -w /vyos --privileged --sysctl net.ipv6.conf.lo.disable_ipv6=0 vyos-builder bash -c './configure && make iso' >/dev/tty1 2>&1 || (echo ; echo ; echo "Something went wrong... aborting. (make iso)" ; exit 1)
-  - echo '\n
-      menuentry "live-amd64-vyos" {\n
-        insmod ext2\n
-        set isofile="/root/vyos-build/build/live-image-amd64.hybrid.iso"\n
-        loopback loop (hd0,1)$isofile\n
-        linux (loop)/live/vmlinuz boot=live fromiso=/dev/sda1$isofile toram components hostname=vyos username=live nopersistence noautologin nonetworking union=overlay console=ttyS0,115200 console=tty0 net.ifnames=0 biosdevname=0\n
-        initrd (loop)/live/initrd.img\n
-      }\n' >> /etc/grub.d/40_custom
-  - update-grub >/dev/tty1 2>&1
-  - grub-reboot live-amd64-vyos >/dev/tty1 2>&1
-  - reboot >/dev/tty1 2>&1
+  - curl -Ls https://raw.githubusercontent.com/mattx86/vyos-iso-cloud-config/main/vyos-iso-cloud-config.sh -o /root/vyos-iso-cloud-config.sh
+  - chmod 700 /root/vyos-iso-cloud-config.sh
+  - /root/vyos-iso-cloud-config.sh equuleus boot >/dev/tty1 2>&1

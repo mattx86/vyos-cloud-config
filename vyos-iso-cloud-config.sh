@@ -12,10 +12,7 @@ ACTION="${2:-boot}"
 
 # Install some packages.
 apt-get update
-apt-get install -y apt-transport-https ca-certificates curl gnupg2 software-properties-common git ufw
-
-# Enable the firewall.
-ufw enable
+apt-get install -y apt-transport-https ca-certificates gnupg2 software-properties-common git
 
 # Upgrade all packages.
 apt-get upgrade -y
