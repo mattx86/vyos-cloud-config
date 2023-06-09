@@ -67,7 +67,7 @@ runcmd:
   - apt-get install -y docker-ce >/dev/tty1 2>&1
   - systemctl start docker >/dev/tty1 2>&1
   - cd /root && git clone -b equuleus --single-branch https://github.com/vyos/vyos-build >/dev/tty1 2>&1
-  - cd /root/vyos-build/docker && docker build -t vyos-builder . >/dev/tty1 2>&1
-  - cd /root/vyos-build && docker run -t -v "$(pwd)":/vyos -w /vyos --privileged --sysctl net.ipv6.conf.lo.disable_ipv6=0 vyos-builder bash -c './configure && make iso' >/dev/tty1 2>&1
+  - cd /root/vyos-build/docker && docker build -t vyos-builder . >/dev/tty1 2>&1 || (echo ; echo ; echo "Something went wrong... aborting. (Step: vyos-builder)" ; exit 1)
+  - cd /root/vyos-build && docker run -t -v "$(pwd)":/vyos -w /vyos --privileged --sysctl net.ipv6.conf.lo.disable_ipv6=0 vyos-builder bash -c './configure && make iso' >/dev/tty1 2>&1 || (echo ; echo ; echo "Something went wrong... aborting. (Step: make iso)" ; exit 1)
   - systemctl stop docker
   - /usr/local/bin/iso_file_final.sh >/dev/tty1 2>&1
