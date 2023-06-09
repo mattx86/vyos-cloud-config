@@ -28,10 +28,13 @@ systemctl start docker
 cd /root && git clone -b equuleus --single-branch https://github.com/vyos/vyos-build
 
 # Build the vyos-build Docker image.
-cd /root/vyos-build/docker && docker build -t vyos-builder . || echo -e "\n\nSomething went wrong... aborting. (Step: docker build)" && exit 1
+cd /root/vyos-build/docker && docker build -t vyos-builder .
 
 # Create the VyOS ISO.
-cd /root/vyos-build && docker run -t -v "$(pwd)":/vyos -w /vyos --privileged --sysctl net.ipv6.conf.lo.disable_ipv6=0 vyos-builder bash -c './configure && make iso' || echo -e "\n\nSomething went wrong... aborting. (Step: make iso)" && exit 1
+cd /root/vyos-build && docker run -t -v "$(pwd)":/vyos -w /vyos --privileged --sysctl net.ipv6.conf.lo.disable_ipv6=0 vyos-builder bash -c './configure && make iso'
+
+# Ensure the ISO was created.
+test -f /root/vyos-build/build/live-image-amd64.hybrid.iso || echo -e "\n\nSomething went wrong... aborting." && exit 1
 
 if [ "x$ACTION" == "xboot" ] ; then
 
