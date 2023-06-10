@@ -37,7 +37,7 @@ sed -ri 's;deb \[arch=amd64\] (http://repo\.powerdns\.com/debian .*);deb [arch=a
 cd /root/vyos-build && docker run -t -v "$(pwd)":/vyos -w /vyos --privileged --sysctl net.ipv6.conf.lo.disable_ipv6=0 vyos-builder bash -c './configure && make iso'
 
 # Ensure the ISO was created.
-test -f /root/vyos-build/build/live-image-amd64.hybrid.iso || echo -e "\n\nSomething went wrong... aborting.  Please check for errors above." && exit 1
+test -f /root/vyos-build/build/live-image-amd64.hybrid.iso || (echo -e "\n\nSomething went wrong... aborting.  Please check for errors above." && exit 1)
 
 if [ "x$ACTION" == "xboot" ] ; then
 
